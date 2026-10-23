@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="dot"></span>问卷自动填写</div>
+    <div class="sub">填入问卷地址，一键打开并自动填写</div>
+  </header>
+
+  <main>
+    <section class="card">
+      <label class="lbl" for="url">问卷地址</label>
+      <div class="urlrow">
+        <input id="url" type="url" spellcheck="false" placeholder="https://v.wjx.cn/vm/xxxx.aspx">
+        <button id="open" class="primary">打开并填写</button>
+      </div>
+      <div class="row2">
+        <button id="fillHere" class="ghost">填写当前页</button>
+        <button id="reloadHere" class="ghost">刷新等待开放</button>
+      </div>
+      <div class="opts">
+        <label class="chk"><input type="checkbox" id="optAutoReload"> 未开放时自动刷新</label>
+        <label class="chk"><input type="checkbox" id="optAutoSubmit"> 填完自动提交</label>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="cardhead">
+        <span>我的资料</span>
+        <button id="save" class="mini">保存</button>
+      </div>
+      <div class="grid">
+        <label>姓名<input data-key="name" type="text" placeholder="张三"></label>
+        <label>手机号<input data-key="phone" type="tel" placeholder="13800000000"></label>
+        <label>性别
+          <select data-key="gender">
+            <option value="">未填</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+        </label>
+        <label>年龄<input data-key="age" type="text" placeholder="22"></label>
+        <label>年级<input data-key="grade" type="text" placeholder="26级"></label>
+        <label>班级<input data-key="className" type="text" placeholder="临床一班"></label>
+        <label>专业<input data-key="major" type="text" list="majorOptions" placeholder="临床医学"></label>
+        <label>邮箱<input data-key="email" type="text" placeholder="you@example.com"></label>
+        <label>学校/单位<input data-key="school" type="text" placeholder="XX大学"></label>
+        <label>学号/工号<input data-key="studentId" type="text" placeholder=""></label>
+        <label>身份证号<input data-key="idcard" type="text" placeholder=""></label>
+        <label>场次<input data-key="session" type="text" placeholder="如：第一场"></label>
+        <label>校区<input data-key="campus" type="text" placeholder=""></label>
+        <label>微信号<input data-key="wechat" type="text" placeholder=""></label>
+      </div>
+      <label class="full">备注<textarea data-key="remark" rows="2" placeholder="其他需要填写的内容"></textarea></label>
+      <label class="full">自定义字段（JSON，键为题目关键词）
+        <textarea id="extra" rows="3" spellcheck="false" placeholder='{"你从哪里得知本次活动": "公众号", "是否参加过": "否"}'></textarea>
+      </label>
+    </section>
+
+    <footer>
+      <span id="status">资料只保存在本机浏览器</span>
+    </footer>
+  </main>
+
+  <datalist id="majorOptions">
+    <option value="临床医学"></option>
+    <option value="临床医学（五年制）"></option>
+    <option value="口腔医学"></option>
+    <option value="麻醉学"></option>
+    <option value="医学影像学"></option>
+    <option value="预防医学"></option>
+    <option value="中医学"></option>
+    <option value="中西医临床医学"></option>
+    <option value="护理学"></option>
+    <option value="药学"></option>
+    <option value="临床药学"></option>
+    <option value="康复治疗学"></option>
+    <option value="医学检验技术"></option>
+    <option value="生物医学工程"></option>
+    <option value="儿科学"></option>
+    <option value="精神医学"></option>
+    <option value="眼视光医学"></option>
+    <option value="基础医学"></option>
+    <option value="法医学"></option>
+    <option value="公共卫生管理"></option>
+  </datalist>
+
+  <script src="popup.js"></script>
+</body>
+</html>

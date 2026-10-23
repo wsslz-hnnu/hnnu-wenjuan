@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>问卷自动填写 · 网页版</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>问卷自动填写 <span class="tag">网页版</span></h1>
+      <p>填一次资料，生成一个书签；以后在任何问卷页点一下书签，自动填好。</p>
+      <p class="small">无需安装扩展 · 数据只存在本机浏览器 · 不上传</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="step"><span class="num">1</span> 填资料</div>
+      <p class="hint">按问卷题目填写，空的项会跳过。点「+ 添加字段」输入题目里的关键词就能新增一栏；不想要的点这一栏右上角的 ×。</p>
+      <div id="fields" class="grid"></div>
+      <div class="fieldbar">
+        <button id="addField" class="ghost" type="button">+ 添加字段</button>
+        <button id="resetFields" class="ghost" type="button">恢复默认字段</button>
+        <button id="reset" class="ghost" type="button">清空资料</button>
+      </div>
+      <div id="addRow" class="addrow" hidden>
+        <input id="newFieldName" type="text" placeholder="输入题目里的关键词，例如：宿舍号 / 是否参加过" autocomplete="off">
+        <button id="confirmAdd" class="primary" type="button">添加</button>
+        <button id="cancelAdd" class="ghost" type="button">取消</button>
+      </div>
+      <div class="savebar"><span id="saveState" class="ok">已保存到本机</span></div>
+    </section>
+
+    <section class="card">
+      <div class="step"><span class="num">2</span> 生成一键填写书签</div>
+      <p class="hint">把下面的按钮<b>拖到浏览器书签栏</b>（Chrome / Edge 按 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> 显示书签栏）。资料改动后会自动更新书签，记得重新拖一次。</p>
+      <div class="bookmark-row">
+        <a id="bookmarklet" class="bookmarklet" href="javascript:void(0)">★ 一键填写问卷</a>
+        <button id="copyScript" class="ghost" type="button">复制脚本</button>
+        <label class="chk"><input type="checkbox" id="autoSubmit"> 填完自动提交</label>
+      </div>
+      <p class="hint" id="bmHint">书签里已包含你当前的资料，不含密码等敏感信息。</p>
+    </section>
+
+    <section class="card">
+      <div class="step"><span class="num">3</span> 打开问卷，点书签</div>
+      <div class="urlrow">
+        <input id="url" type="url" spellcheck="false" value="https://v.wjx.cn/vm/h4t66uR.aspx">
+        <button id="open" class="primary" type="button">打开问卷</button>
+      </div>
+      <ol class="steps">
+        <li>点「打开问卷」，在新标签页里等页面加载完</li>
+        <li>点书签栏里的「★ 一键填写问卷」</li>
+        <li>看到右上角提示「已自动填写 N 项」即完成，核对后手动提交</li>
+      </ol>
+      <p class="hint">书签点了没反应？说明页面禁止外部脚本，改用「复制脚本」→ 按 <kbd>F12</kbd> → Console → 粘贴回车。</p>
+    </section>
+
+    <section class="card">
+      <div class="step"><span class="num">✓</span> 在本页试填</div>
+      <p class="hint">下面是一份模拟问卷（结构和问卷星一致），点按钮验证资料能不能正确对上。</p>
+      <div id="demo" class="demo-form">
+        <div class="field">
+          <div class="field-label">1. 年级（如26级）</div>
+          <div class="field-content"><input id="d1" name="d1" type="text"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">2. 班级（如临床一班）</div>
+          <div class="field-content"><input id="d2" name="d2" type="text"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">3. 您的姓名是</div>
+          <div class="field-content"><input id="d3" name="d3" type="text"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">4. 输入您的手机号</div>
+          <div class="field-content"><input id="d4" name="d4" type="tel"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">5. 您的性别</div>
+          <div class="field-content">
+            <label><input type="radio" name="d5" value="1"> 男</label>
+            <label><input type="radio" name="d5" value="2"> 女</label>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">6. 你从哪里得知本次活动</div>
+          <div class="field-content"><textarea id="d6" name="d6" rows="2"></textarea></div>
+        </div>
+        <div class="field">
+          <div class="field-label">7. 你的专业是</div>
+          <div class="field-content"><input id="d7" name="d7" type="text"></div>
+        </div>
+      </div>
+      <div class="savebar">
+        <button id="testFill" class="primary" type="button">用我的资料试填</button>
+        <span id="testResult"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>问卷自动填写 · 网页版</span>
+    <span>资料仅保存在浏览器 localStorage</span>
+  </footer>
+
+  <datalist id="majorOptions">
+    <option value="临床医学"></option>
+    <option value="临床医学（五年制）"></option>
+    <option value="口腔医学"></option>
+    <option value="麻醉学"></option>
+    <option value="医学影像学"></option>
+    <option value="预防医学"></option>
+    <option value="中医学"></option>
+    <option value="中西医临床医学"></option>
+    <option value="护理学"></option>
+    <option value="药学"></option>
+    <option value="临床药学"></option>
+    <option value="康复治疗学"></option>
+    <option value="医学检验技术"></option>
+    <option value="生物医学工程"></option>
+    <option value="儿科学"></option>
+    <option value="精神医学"></option>
+    <option value="眼视光医学"></option>
+    <option value="基础医学"></option>
+    <option value="法医学"></option>
+    <option value="公共卫生管理"></option>
+  </datalist>
+
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

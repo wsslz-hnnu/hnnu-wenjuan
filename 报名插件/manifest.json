@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "问卷自动填写",
+  "version": "1.1.0",
+  "description": "填入问卷地址，一键打开并自动填写报名问卷（支持问卷星等动态页面）。",
+  "permissions": ["storage", "tabs", "scripting"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "问卷自动填写"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["engine.js", "content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}

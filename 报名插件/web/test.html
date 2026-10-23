@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>engine test</title>
+  <style>
+    body { font: 14px system-ui; padding: 20px; }
+    .field { margin-bottom: 14px; }
+    .field-label { font-weight: 600; margin-bottom: 4px; }
+    .ui-controlgroup { display: flex; gap: 16px; }
+    .ui-radio { display: flex; align-items: center; gap: 4px; }
+    input[type="text"], input[type="tel"], textarea, select { padding: 4px; width: 280px; }
+  </style>
+</head>
+<body>
+  <div id="form">
+    <div class="field">
+      <div class="field-label">1. 年级（如26级）</div>
+      <div class="field-content"><div class="ui-input-text"><input type="text" id="q1" name="q1"></div></div>
+    </div>
+    <div class="field">
+      <div class="field-label">2. 班级（如临床一班）</div>
+      <div class="field-content"><div class="ui-input-text"><input type="text" id="q2" name="q2"></div></div>
+    </div>
+    <div class="field">
+      <div class="field-label">3. 您的姓名是</div>
+      <div class="field-content"><div class="ui-input-text"><input type="text" id="q3" name="q3"></div></div>
+    </div>
+    <div class="field">
+      <div class="field-label">4. 输入您的手机号</div>
+      <div class="field-content"><div class="ui-input-text"><input type="tel" id="q4" name="q4"></div></div>
+    </div>
+    <div class="field">
+      <div class="field-label">5. 您的性别</div>
+      <div class="field-content">
+        <div class="ui-controlgroup" role="radiogroup">
+          <div class="ui-radio"><input type="radio" id="q5_1" name="q5" value="1"><label for="q5_1">男</label></div>
+          <div class="ui-radio"><input type="radio" id="q5_2" name="q5" value="2"><label for="q5_2">女</label></div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">6. 观看场次</div>
+      <div class="field-content">
+        <select id="q6" name="q6">
+          <option value="">请选择</option>
+          <option value="1">第一场</option>
+          <option value="2">第二场</option>
+          <option value="3">第三场</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">7. 你从哪里得知本次活动</div>
+      <div class="field-content"><textarea id="q7" name="q7" rows="2"></textarea></div>
+    </div>
+    <div class="field">
+      <div class="field-label">8. 备注</div>
+      <div class="field-content"><input type="text" id="q8" name="q8"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">9. 你的专业是</div>
+      <div class="field-content"><input type="text" id="q9" name="q9"></div>
+    </div>
+  </div>
+  <pre id="out">PENDING</pre>
+
+  <script src="engine.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      var profile = {
+        name: '张三',
+        phone: '13800000000',
+        gender: '女',
+        grade: '26级',
+        className: '临床一班',
+        major: '临床医学',
+        session: '第二场',
+        remark: '无特殊要求',
+        extra: { '你从哪里得知本次活动': '公众号' }
+      };
+      var r = window.AFFILL_ENGINE(profile, { silent: true });
+      var v = function (id) { var e = document.getElementById(id); return e ? e.value : '(missing)'; };
+      var radio = '';
+      var rs = document.querySelectorAll('input[name="q5"]');
+      for (var i = 0; i < rs.length; i++) { if (rs[i].checked) radio = (rs[i].parentElement.innerText || '').trim(); }
+      document.getElementById('out').textContent = 'RESULT ' + JSON.stringify({
+        count: r.count,
+        q1: v('q1'), q2: v('q2'), q3: v('q3'), q4: v('q4'),
+        q5: radio, q6: v('q6'), q7: v('q7'), q8: v('q8'), q9: v('q9'),
+        pairs: r.report.map(function (x) { return x.q + '=>' + x.v; })
+      });
+    });
+  </script>
+</body>
+</html>
